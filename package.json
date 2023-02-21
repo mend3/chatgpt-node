@@ -12,21 +12,21 @@
     "url": "git+https://github.com/mend3/chatgpt-node.git"
   },
   "license": "ISC",
-  "author": "",
+  "author": "Victor Mendonça<victor.mendonca@live.com>",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "node --no-warnings --watch -r dotenv/config -r ts-node/register --loader=ts-node/esm src/index.ts",
+    "dev": "npx ts-node src/index.ts",
     "test": "node --test"
   },
   "dependencies": {
-    "@types/axios": "^0.14.0",
     "axios": "^1.3.3",
     "openai": "^3.1.0"
   },
   "devDependencies": {
+    "@tsconfig/node-lts": "^18.12.1",
+    "@types/axios": "^0.14.0",
     "@types/node": "^18.14.0",
-    "dotenv": "^16.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   }

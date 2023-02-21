@@ -1,19 +1,10 @@
-import { Configuration } from 'openai';
-
-const { OPENAI_API_ORGANIZATION, OPENAI_API_KEY } = process.env;
-
-export const configuration = new Configuration({
-  organization: OPENAI_API_ORGANIZATION,
-  apiKey: OPENAI_API_KEY,
-});
-
-export interface IEngine {
-  endpoint: string;
-  props: unknown;
+export interface IEngine<P = unknown> {
+  model: string;
+  props: P;
 }
 
 export abstract class Engine<T extends IEngine = IEngine, I = string> implements IEngine {
-  abstract endpoint: string;
+  abstract model: string;
   abstract props: T['props'];
   constructor(protected _input: I, protected options?: T['props']) {}
 
@@ -22,7 +13,7 @@ export abstract class Engine<T extends IEngine = IEngine, I = string> implements
     return this;
   }
 
-  protected get input() {
+  public get input() {
     if (!this._input) throw new Error('No input provided');
     return this._input;
   }
