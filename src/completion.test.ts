@@ -3,6 +3,9 @@ import { openai } from './chatgpt';
 import { DummyCompletion, HTTPCompletion, NativeCompletion } from './completion';
 import engines from './engines/index';
 
+vi.stubEnv('OPENAI_API_ORG', 'my-org');
+vi.stubEnv('OPENAI_API_KEY', 'my-key');
+
 describe('Integration Tests for Completions', () => {
   const query = 'how to build a docker image using terraform?';
   describe('davinci', () => {
@@ -11,8 +14,10 @@ describe('Integration Tests for Completions', () => {
     test('HTTPCompletion should handle errors', async () => {
       axios.prototype.post = vi.fn().mockRejectedValueOnce(new Error('Request failed with status code 401'));
       const httpCompletion = new HTTPCompletion(davinci);
+      const httpStub = vi.spyOn(httpCompletion, 'ask');
 
       await expect(httpCompletion.ask()).rejects.toThrowErrorMatchingSnapshot();
+      expect(httpStub).toBeCalledTimes(1);
     });
 
     test('NativeCompletion should handle errors', async () => {
@@ -25,14 +30,18 @@ describe('Integration Tests for Completions', () => {
         );
 
       const nativeCompletion = new NativeCompletion(davinci);
+      const nativeStub = vi.spyOn(nativeCompletion, 'ask');
 
       await expect(nativeCompletion.ask()).rejects.toThrowErrorMatchingSnapshot();
+      expect(nativeStub).toBeCalledTimes(1);
     });
 
     test('DummyCompletion should succeed', async () => {
       const dummyCompletion = new DummyCompletion(davinci);
+      const dummyStub = vi.spyOn(dummyCompletion, 'ask');
 
       await expect(dummyCompletion.ask()).resolves.toMatchSnapshot();
+      expect(dummyStub).toBeCalledTimes(1);
     });
   });
   describe('davinci003', () => {
@@ -41,8 +50,10 @@ describe('Integration Tests for Completions', () => {
     test('HTTPCompletion should handle errors', async () => {
       axios.prototype.post = vi.fn().mockRejectedValueOnce(new Error('Request failed with status code 401'));
       const httpCompletion = new HTTPCompletion(davinci003);
+      const httpStub = vi.spyOn(httpCompletion, 'ask');
 
       await expect(httpCompletion.ask()).rejects.toThrowErrorMatchingSnapshot();
+      expect(httpStub).toBeCalledTimes(1);
     });
 
     test('NativeCompletion should handle errors', async () => {
@@ -55,10 +66,10 @@ describe('Integration Tests for Completions', () => {
         );
 
       const nativeCompletion = new NativeCompletion(davinci003);
-      const nativeStube = vi.spyOn(nativeCompletion, 'ask');
+      const nativeStub = vi.spyOn(nativeCompletion, 'ask');
 
       await expect(nativeCompletion.ask()).rejects.toThrowErrorMatchingSnapshot();
-      expect(nativeStube).toBeCalledTimes(1)
+      expect(nativeStub).toBeCalledTimes(1);
     });
 
     test('DummyCompletion should succeed', async () => {
@@ -66,7 +77,7 @@ describe('Integration Tests for Completions', () => {
       const dummyStub = vi.spyOn(dummyCompletion, 'ask');
 
       await expect(dummyCompletion.ask()).resolves.toMatchSnapshot();
-      expect(dummyStub).toBeCalledTimes(1)
+      expect(dummyStub).toBeCalledTimes(1);
     });
   });
 });
