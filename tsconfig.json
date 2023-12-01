@@ -36,6 +36,6 @@
       "@lib/*": ["./src/lib/*"]
     }
   },
-  "include": ["./src", "./tests"],
+  "include": ["./src", "./tests", "tests"],
   "files": ["src/global.d.ts"]
 }

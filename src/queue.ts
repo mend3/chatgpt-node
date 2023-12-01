@@ -1,15 +1,5 @@
-import type { CompletionCreateParamsBase } from 'openai/resources/completions';
 import { logger } from './logger';
-
-export interface IAppCompletion {
-  readonly engine: IEngine;
-  ask(): Promise<any>;
-}
-export interface IEngine<I = string> {
-  model: string;
-  props: CompletionCreateParamsBase;
-  input: I;
-}
+import { IAppCompletion } from './types';
 
 export class Queue {
   #completions: IAppCompletion[] = [];

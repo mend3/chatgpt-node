@@ -1,4 +1,4 @@
-import { Env } from './env';
+import { Env } from '../src/env';
 
 describe('Unit Tests for Env Namespace', () => {
   beforeEach(() => {

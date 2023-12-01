@@ -25,6 +25,7 @@ export default defineConfig({
     globals: true,
     mockReset: true,
     clearMocks: true,
+    unstubEnvs: true,
     hookTimeout: 60_000,
     testTimeout: 10_000,
     coverage: {

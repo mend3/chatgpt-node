@@ -1,6 +1,8 @@
-import { Queue } from './queue';
-import engines from './engines/index';
-import { HTTPCompletion, NativeCompletion, DummyCompletion } from './completion';
+import { DummyCompletion } from '../src/completions/dummy';
+import { HTTPCompletion } from '../src/completions/http';
+import { NativeCompletion } from '../src/completions/native';
+import { Davinci003, DavinciCodex } from '../src/engines/davinci';
+import { Queue } from '../src/queue';
 
 describe('Unit Tests for the Queue System', () => {
   afterEach(() => {
@@ -16,7 +18,7 @@ describe('Unit Tests for the Queue System', () => {
   );
 
   test('Queue should handle completions and retries', async () => {
-    const davinci = new engines.OpenDavinci(query);
+    const davinci = new DavinciCodex(query);
 
     // Mock HTTPCompletion to fail on the first two attempts
     HTTPCompletion.prototype.ask = vi
@@ -68,7 +70,7 @@ describe('Unit Tests for the Queue System', () => {
   });
 
   test('Queue should run all max retries', async () => {
-    const davinci = new engines.OpenDavinci(query);
+    const davinci = new Davinci003(query);
 
     // Mock HTTPCompletion to fail on the first two attempts
     HTTPCompletion.prototype.ask = vi
