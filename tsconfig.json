@@ -1,12 +1,41 @@
 {
-  "extends": "@tsconfig/node-lts/tsconfig.json",
-  "compilerOptions": {
-    "rootDir": ".",
-    "target": "es2017",
-    "module": "ES2022",
-    "baseUrl": "./src",
-    "sourceRoot": "./src",
-    "sourceMap": true
+  "buildOptions": {
+    "verbose": true
   },
-  "ts-node": { "esm": true, "experimentalSpecifierResolution": "node" }
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "alwaysStrict": true,
+    "composite": false,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "CommonJS",
+    "target": "ES2017",
+    "moduleResolution": "Node",
+    "noErrorTruncation": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "outDir": "./build",
+    "preserveConstEnums": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "types": ["node", "vitest/globals"],
+    "useUnknownInCatchVariables": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "declaration": true,
+    "paths": {
+      "@lib/*": ["./src/lib/*"]
+    }
+  },
+  "include": ["./src", "./tests"],
+  "files": ["src/global.d.ts"]
 }

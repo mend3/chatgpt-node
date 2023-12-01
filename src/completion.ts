@@ -1,38 +1,41 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { CreateCompletionRequest, CreateCompletionResponse } from 'openai';
-import { Engine } from './engine';
-import { openai, configuration } from './chatgpt';
+import axios, { AxiosRequestConfig } from 'axios';
+import { Completion } from 'openai/resources';
+import { IAppCompletion, IEngine } from './queue';
+import { openai } from './chatgpt';
+import { Env } from './env';
 
-interface ICompletion {
-  readonly engine: Engine;
-  ask(): Promise<unknown>;
+export class DummyCompletion implements IAppCompletion {
+  constructor(public readonly engine: IEngine) {}
+
+  async ask() {
+    return `I'm dummy but I work!`;
+  }
 }
-
-export class Completion implements ICompletion {
-  constructor(public readonly engine: Engine) {}
+export class NativeCompletion implements IAppCompletion {
+  constructor(public readonly engine: IEngine) {}
 
   async ask() {
     const { model, input, props } = this.engine;
-    return openai.createCompletion({
-      ...(props as CreateCompletionRequest),
+    return openai.chat.completions.create({
+      ...props,
       model,
-      prompt: input,
-    }) as Promise<AxiosResponse<CreateCompletionResponse>>;
+      messages: [{ role: 'user', content: input }],
+    });
   }
 }
 
-export class HTTPCompletion implements ICompletion {
-  constructor(public readonly engine: Engine) {}
+export class HTTPCompletion implements IAppCompletion {
+  constructor(public readonly engine: IEngine) {}
 
   async ask() {
     const { model, props } = this.engine;
     const config: AxiosRequestConfig = {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${configuration.apiKey}`,
+        Authorization: `Bearer ${Env.variables.apiKey}`,
       },
     };
 
-    return axios.post<CreateCompletionResponse>(model, props, config);
+    return axios.post<Completion>(model, props, config).then(({ data }) => data);
   }
 }

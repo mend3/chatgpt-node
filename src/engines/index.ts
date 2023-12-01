@@ -1,3 +1,3 @@
-import { Davinci, Davinci003 } from './davinci';
+import { OpenDavinci, Davinci003 } from './davinci';
 
-export default { Davinci, Davinci003 };
+export default { OpenDavinci, Davinci003 };

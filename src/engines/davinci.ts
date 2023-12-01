@@ -1,24 +1,26 @@
-import { Engine, IEngine } from '../engine';
+import { Engine } from '../engine';
+import { IEngine } from '../queue';
 
 interface DavinciEngine extends IEngine {
-  model: string;
   props: {
+    model: string;
     prompt: `Q: ${string}\nA:`;
     max_tokens: number;
     n: number;
     stop: string;
   };
 }
-export class Davinci extends Engine<DavinciEngine> {
+export class OpenDavinci extends Engine<DavinciEngine> {
   model = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 
   public get props() {
     return {
+      ...this.options,
+      model: this.model,
       prompt: `Q: ${this.input}\nA:` satisfies `Q: ${string}\nA:`,
       max_tokens: 150,
       n: 1,
       stop: '\n',
-      ...this.options,
     };
   }
 }
@@ -28,6 +30,7 @@ export class Davinci003 extends Engine {
 
   public get props() {
     return {
+      model: this.model,
       prompt: this.input,
       temperature: 0,
       max_tokens: 100,
