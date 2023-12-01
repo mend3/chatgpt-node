@@ -1,16 +1,7 @@
-import { Engine } from '../engine';
-import { IEngine } from '../queue';
+import { DavinciEngine } from '../types';
+import { Engine } from './engine';
 
-interface DavinciEngine extends IEngine {
-  props: {
-    model: string;
-    prompt: `Q: ${string}\nA:`;
-    max_tokens: number;
-    n: number;
-    stop: string;
-  };
-}
-export class OpenDavinci extends Engine<DavinciEngine> {
+export class DavinciCodex extends Engine<DavinciEngine> {
   model = 'https://api.openai.com/v1/engines/davinci-codex/completions';
 
   public get props() {

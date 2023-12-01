@@ -1,5 +1,7 @@
-import { DummyCompletion, HTTPCompletion, NativeCompletion } from './completion';
-import engines from './engines/index';
+import { DummyCompletion } from './completions/dummy';
+import { HTTPCompletion } from './completions/http';
+import { NativeCompletion } from './completions/native';
+import { Davinci003, DavinciCodex } from './engines/davinci';
 import { Env } from './env';
 import { logger } from './logger';
 import { Queue } from './queue';
@@ -9,8 +11,8 @@ Env.load();
 (async () => {
   const query = 'how to build a docker image using terraform?';
 
-  const davinci = new engines.OpenDavinci(query);
-  const davinci003 = new engines.Davinci003(query);
+  const davinci = new DavinciCodex(query);
+  const davinci003 = new Davinci003(query);
 
   const enginesFirts = [davinci, davinci003]
     .map(engine =>

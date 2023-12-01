@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { openai } from './chatgpt';
-import { DummyCompletion, HTTPCompletion, NativeCompletion } from './completion';
-import engines from './engines/index';
+import { openai } from '../src/chatgpt';
+import { DummyCompletion } from '../src/completions/dummy';
+import { HTTPCompletion } from '../src/completions/http';
+import { NativeCompletion } from '../src/completions/native';
+import { Davinci003, DavinciCodex } from '../src/engines/davinci';
 
 vi.stubEnv('OPENAI_API_ORG', 'my-org');
 vi.stubEnv('OPENAI_API_KEY', 'my-key');
@@ -9,7 +11,7 @@ vi.stubEnv('OPENAI_API_KEY', 'my-key');
 describe('Integration Tests for Completions', () => {
   const query = 'how to build a docker image using terraform?';
   describe('davinci', () => {
-    const davinci = new engines.OpenDavinci(query);
+    const davinci = new DavinciCodex(query);
 
     test('HTTPCompletion should handle errors', async () => {
       axios.prototype.post = vi.fn().mockRejectedValueOnce(new Error('Request failed with status code 401'));
@@ -45,7 +47,7 @@ describe('Integration Tests for Completions', () => {
     });
   });
   describe('davinci003', () => {
-    const davinci003 = new engines.Davinci003(query);
+    const davinci003 = new Davinci003(query);
 
     test('HTTPCompletion should handle errors', async () => {
       axios.prototype.post = vi.fn().mockRejectedValueOnce(new Error('Request failed with status code 401'));
